@@ -1,0 +1,8 @@
+{
+  "devDependencies": {
+    "react-router-dom": "^6.26.1"
+  },
+  "dependencies": {
+    "sqlite3": "^5.1.7"
+  }
+}
