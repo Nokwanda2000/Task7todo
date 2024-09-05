@@ -1,6 +1,7 @@
-import { useState } from 'react'
-import { BrowserRouter, Routes, Route } from "react-router-dom";
 
+import { useEffect, useState } from 'react'
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import axios from 'axios';
 import Layout from './pages/Layout';
 import Login from './pages/Login';
 import Landing from './pages/Landing';
@@ -10,7 +11,17 @@ import Registerpage from './pages/Registerpage';
 import './App.css'
 function App() {
   
+  const[list,setList] =useState([]);
 
+  useEffect(()=>{
+    axios.get('http://localhost:5000').then((res)=>{
+     setList(res.data)
+    }).catch((error)=>{
+      console.log(error,'Oops crashed')
+
+    })
+  },[]);
+  console.log(list)
   return (
     <>
        <BrowserRouter>

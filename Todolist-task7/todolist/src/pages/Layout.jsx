@@ -23,9 +23,7 @@ export default function Layout() {
           <li>
             <Link to="/Registerpage">Register</Link>
           </li>
-          <li>
-            <Link to="/Home"> Todo</Link>
-          </li>
+          
         </ul>
       </nav>
       <Outlet/>
