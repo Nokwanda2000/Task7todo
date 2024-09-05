@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import SQL from 'sql.js';
 import { Link } from 'react-router-dom';
+import Home from '../pages/Home';
+import axios from 'axios';
 
 export default function Register() {
   const [formData, setFormData] = useState({
@@ -126,7 +128,7 @@ export default function Register() {
             }}
           />
         </div>
-        <Link to="/Home"> <button
+        <Link to='/Home'> <button
           type="submit"
           className="register-button"
           style={{

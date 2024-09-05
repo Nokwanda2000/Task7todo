@@ -1,125 +1,172 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
-export default function Todo() {
-  const [lists, setLists] = useState([
-    { id: 1, name: 'Home', todos: [] },
-    { id: 2, name: 'Work', todos: [] },
-    { id: 3, name: 'Other', todos: [] },
-  ]);
-
-  const [selectedList, setSelectedList] = useState(lists[0]);
-
-  const handleListChange = (listId) => {
-    const newList = lists.find((list) => list.id === listId);
-    setSelectedList(newList);
+function Todo() {
+  const [tasks, setTasks] = useState([]);
+  const [newTask, setNewTask] = useState({ title: '', description: '', priority: 'medium' });
+  const [editingTask, setEditingTask] = useState(null);
+  useEffect(() => {
+    axios.get('http://localhost:5000/todo')
+      .then(response => {
+        setTasks(response.data);
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  }, []);
+  const handleAddTask = () => {
+    axios.post('http://localhost:5000/todo', newTask)
+      .then(response => {
+        setTasks([...tasks, response.data]);
+        setNewTask({ title: '', description: '', priority: 'medium' });
+      })
+      .catch(error => {
+        console.error(error);
+      });
   };
-
-  const handleTodoChange = (todoId, completed) => {
-    const newList = [...selectedList.todos];
-    const todoIndex = newList.findIndex((todo) => todo.id === todoId);
-    newList[todoIndex].completed = completed;
-    setSelectedList({ ...selectedList, todos: newList });
+  const handleUpdateTask = (task) => {
+    axios.put(`http://localhost:5000/todo/${task.id}`, task)
+      .then(response => {
+        setTasks(tasks.map(t => t.id === task.id ? task : t));
+        setEditingTask(null);
+      })
+      .catch(error => {
+        console.error(error);
+      });
   };
-
-  const handleAddTodo = (text) => {
-    const newTodo = { id: Math.random(), text, completed: false };
-    setSelectedList({ ...selectedList, todos: [...selectedList.todos, newTodo] });
+  const handleDeleteTask = (taskId) => {
+    axios.delete(`http://localhost:5000/todo/${taskId}`)
+      .then(response => {
+        setTasks(tasks.filter(t => t.id !== taskId));
+      })
+      .catch(error => {
+        console.error(error);
+      });
   };
-  
-  const handleDeleteTodo = (todoId) => {
-    const newList = [...selectedList.todos];
-    const todoIndex = newList.findIndex((todo) => todo.id === todoId);
-    newList.splice(todoIndex, 1);
-    setSelectedList({ ...selectedList, todos: newList });
+  const handlePriorityChange = (event) => {
+    setNewTask({ ...newTask, priority: event.target.value });
   };
-
+  const handleEditTaskChange = (event, field) => {
+    setEditingTask({ ...editingTask, [field]: event.target.value });
+  };
   return (
-    <div className="container" style={{
-      display: "flex",
-      backgroundColor: "#fff",
-      borderRadius: "10px",
-      boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
-      padding: "20px",
-    }}>
-
-      <div className="list-container" style={{
-        width: "300px",
-        padding: "20px",
-        borderRight: "1px solid #eee",
-      }}>
-
-        <h2 className="list-title" style={{
-          fontSize: "1.2rem",
-          fontWeight: "bold",
-          marginBottom: "15px",
-        }}>Lists</h2>
-
-        {lists.map((list) => (
-          <div key={list.id} className="list-item" style={{
-            display: "flex",
-            alignItems: "center",
-            padding: "10px",
-            borderBottom: "1px solid #eee",
-          }}>
-            <input type="checkbox" checked={selectedList.id === list.id} onChange={() => handleListChange(list.id)} />
-            <span>{list.name}</span>
-            <span className="arrow" style={{ marginLeft: "auto", fontSize: "1.2rem" }}>→</span>
-          </div>
+    <div className='todo'>
+      <h1>Todo Page</h1>
+      <form className='todo-form'>
+        <label>
+          Title:
+          <input type="text" value={newTask.title} onChange={(event) => setNewTask({ ...newTask, title: event.target.value })} placeholder='Title'/>
+        </label>
+        <br />
+        <label>
+          Description:
+          <input type="text" value={newTask.description} onChange={(event) => setNewTask({ ...newTask, description: event.target.value })} />
+        </label>
+        <br />
+        <label>
+          Priority:
+          <select value={newTask.priority} onChange={handlePriorityChange}>
+            <option value="easy">Easy</option>
+            <option value="medium">Medium</option>
+            <option value="hard">Hard</option>
+          </select>
+        </label>
+        <br />
+        <button type="submit" onClick={handleAddTask}>Add Task</button>
+      </form>
+      <ul>
+        {tasks.map((task) => (
+          <li key={task.id}>
+            <h2>{task.title}</h2>
+            <p>{task.description}</p>
+            <p>Priority: {task.priority}</p>
+            <button className='edit-btn' onClick={() => setEditingTask(task)}>Edit</button>
+            <button className='delete-btn' onClick={() => handleDeleteTask(task.id)}>Delete</button>
+            {editingTask === task && (
+              <form>
+                <label>
+                  Title:
+                  <input type="text" value={editingTask.title} onChange={(event) => handleEditTaskChange(event, 'title')} />
+                </label>
+                <br />
+                <label>
+                  Description:
+                  <input type="text" value={editingTask.description} onChange={(event) => handleEditTaskChange(event, 'description')} />
+                </label>
+                <br />
+                <label>
+                  Priority:
+                  <select value={editingTask.priority} onChange={(event) => handleEditTaskChange(event, 'priority')}>
+                    <option value="easy">Easy</option>
+                    <option value="medium">Medium</option>
+                    <option value="hard">Hard</option>
+                  </select>
+                </label>
+                <br />
+                <button type="submit" onClick={() => handleUpdateTask(editingTask)}>Update Task</button>
+              </form>
+            )}
+          </li>
         ))}
-      </div>
-
-      <div className="todo-container" style={{
-        width: "300px",
-        padding: "20px",
-      }}>
-        <h2 className="todo-title" style={{
-          fontSize: "1.2rem",
-          fontWeight: "bold",
-          marginBottom: "15px",
-        }}>{selectedList.name}</h2>
-
-        {selectedList.todos.map((todo) => (
-          <div key={todo.id} className="todo-item" style={{
-            display: "flex",
-            alignItems: "center",
-            padding: "10px",
-            borderBottom: "1px solid #eee",
-          }}>
-            <input type="checkbox" checked={todo.completed} onChange={(e) => handleTodoChange(todo.id, e.target.checked)} />
-            <span className="circle" style={{
-              width: "15px",
-              height: "15px",
-              borderRadius: "50%",
-              border: "2px solid #ccc",
-              marginRight: "10px",
-              backgroundColor: todo.completed ? "#4CAF50" : "#fff",
-            }}></span>
-            <span>{todo.text}</span>
-          </div>
-        ))}
-
-        <button className="add-button" style={{
-          backgroundColor: "#4CAF50",
-          color: "white",
-          padding: "10px 20px",
-          border: "none",
-          borderRadius: "5px",
-          cursor: "pointer",
-          fontSize: "1rem",
-          marginTop: "15px",
-        }} onClick={() => handleAddTodo(prompt("Enter new todo:"))}>+</button>
-
-<button className="add-button" style={{
-          backgroundColor: "red",
-          color: "white",
-          padding: "10px 20px",
-          border: "none",
-          borderRadius: "5px",
-          cursor: "pointer",
-          fontSize: "1rem",
-          marginTop: "15px",
-        }} onClick={() => handleDeleteTodo(prompt("Delete new todo:"))}>+</button>
-      </div>
+      </ul>
     </div>
   );
 }
+export default Todo;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// // frontend/src/components/Todo.jsx
+// import React, { useState, useEffect } from 'react';
+// import axios from 'axios';
+
+// const Todo = () => {
+//   // const [todos, setTodos] = useState([]);
+
+//   // useEffect(() => {
+//   //   const fetchTodos = async () => {
+//   //     try {
+//   //       const response = await axios.get('http://localhost:5000/todo');
+//   //       setTodos(response.data);
+//   //     } catch (error) {
+//   //       console.error('Error fetching todos:', error);
+//   //     }
+//   //   };
+
+//   //   fetchTodos();
+//   // }, []);
+
+  
+
+//   return (
+//     <div>
+//       <h1>Todo List</h1>
+//       <ul>
+//         {todos.map((todo) => (
+//           <li key={todo.id}>
+//             <p>Home: {todo.home}</p>
+//             <p>Work: {todo.work}</p>
+//             <p>Other: {todo.other}</p>
+//           </li>
+//         ))}
+//       </ul>
+//     </div>
+//   );
+// };
+
+// export default Todo;

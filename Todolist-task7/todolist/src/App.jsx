@@ -6,22 +6,23 @@ import Layout from './pages/Layout';
 import Login from './pages/Login';
 import Landing from './pages/Landing';
 import Home from './pages/Home';
+import Todo from './components/todo';
 
 import Registerpage from './pages/Registerpage';
 import './App.css'
 function App() {
   
-  const[list,setList] =useState([]);
+  const[todo,setTodo] =useState([]);
 
   useEffect(()=>{
     axios.get('http://localhost:5000').then((res)=>{
-     setList(res.data)
+     setTodo(res.data)
     }).catch((error)=>{
       console.log(error,'Oops crashed')
 
     })
   },[]);
-  console.log(list)
+  console.log(todo)
   return (
     <>
        <BrowserRouter>
@@ -31,7 +32,8 @@ function App() {
           <Route path="/Landing" element={<Landing/>} />
         
           <Route path="/Login" element={<Login/>}/>
-          <Route path='/Registerpage' element={<Registerpage/>}>
+          <Route path='/' element={<Registerpage/>}>
+          <Route path=':id' element={<Todo/>}/>
           </Route> 
           <Route path='/Home' element={<Home/>}></Route>
           </Route>
