@@ -15,10 +15,16 @@ function App() {
   const[todo,setTodo] =useState([]);
 
   useEffect(()=>{
-    axios.get('http://localhost:5000').then((res)=>{
+    axios.get('http://localhost:3001').then((res)=>{
      setTodo(res.data)
     }).catch((error)=>{
       console.log(error,'Oops crashed')
+
+    
+        console.error('Error:', error);
+        console.error('Error message:', error.message);
+        console.error('Error stack:', error.stack);
+      
 
     })
   },[]);

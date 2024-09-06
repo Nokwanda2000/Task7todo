@@ -1,61 +1,117 @@
-// server.js
 const express = require('express');
+const cors = require('cors');
+const db = require('better-sqlite3')('database.db');
 const sqlite3 = require('sqlite3');
 
+ 
+
 const app = express();
+const port = 3001;
+
+app.use(cors());
 app.use(express.json());
 
-// Database setup
-const db = new sqlite3.Database('./database.db', (err) => {
-  if (err) {
-    console.error(err.message);
+
+// Create the table
+const createTable = () => {
+  const sql = `
+      CREATE TABLE IF NOT EXISTS todo (
+           id INTEGER PRIMARY KEY AUTOINCREMENT,
+           title TEXT NOT NULL,
+           description  TEXT NOT NULL,
+           priority TEXT NOT NULL
+      )
+  `;
+  db.prepare(sql).run();
+};
+
+createTable();
+
+
+
+
+// Insert a new user
+app.post('/todo', (req, res) => {
+  const { title, description, priority } = req.body;
+
+  const insertStatement = db.prepare(
+    'INSERT INTO todo (title, description, priority) VALUES (?, ?, ?)'
+  );
+
+  insertStatement.run(title, description, priority); 
+
+ 
+  // Run the SQL statement with the provided values
+  // db.run(sql, [title, description, priority], (err) => {
+  //   if (err) {
+  //     console.error(err);
+  //     res.status(500).json({ error: 'Failed to add todo' }); 
+  //   } else {
+  //     res.status(201).json({ message: 'Todo added successfully' });
+  //     db.run('COMMIT'); // Commit the transaction 
+  //   }
+  // });
+});
+
+// Get all users
+app.get('/todo', (req, res) => {
+  const sql = `
+      SELECT * FROM todo
+  `;
+  const rows = db.prepare(sql).all();
+  res.json(rows);
+});
+
+// Get a user by id
+app.get('/todo/:id', (req, res) => {
+  const { id } = req.params;
+  const sql = `
+      SELECT * FROM todo
+      WHERE id = ?
+  `;
+  const row = db.prepare(sql).get(id);
+  if (row) {
+      res.json(row);
   } else {
-    console.log('Connected to the database.');
+      res.status(404).json({ error: 'Todo not found' });
   }
 });
 
-// Create the todos table if it doesn't exist
-db.run(`
-  CREATE TABLE IF NOT EXISTS todos (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    home TEXT,
-    work TEXT,
-    other TEXT
-  )
-`);
-
-// GET all todos
-app.get('/todo', (req, res) => {
-  const sql = 'SELECT * FROM todos';
-  const todos = db.prepare(sql).all();
-  res.json(todos);
-});
-
-// POST a new todo
-app.post('/todo', (req, res) => {
-  const { home, work, other } = req.body;
-  const sql = 'INSERT INTO todos (home, work, other) VALUES (?, ?, ?)';
-  const todo = db.prepare(sql).run(home, work, other);
-  res.status(201).json({ id: todo.lastInsertRowID });
-});
-
-// DELETE a todo
-app.delete('/todo/:id', (req, res) => {
-  const id = req.params.id;
-  const sql = 'DELETE FROM todos WHERE id = ?';
-  db.prepare(sql).run(id);
-  res.status(204).send();
-});
-
-// UPDATE a todo
+// Update a user by id
 app.put('/todo/:id', (req, res) => {
-  const id = req.params.id;
-  const { home, work, other } = req.body;
-  const sql = 'UPDATE todos SET home = ?, work = ?, other = ? WHERE id = ?';
-  db.prepare(sql).run(home, work, other, id);
-  res.status(200).send();
+  const { id } = req.params;
+  const {title, description, priority  } = req.body;
+  const sql = `
+      UPDATE todo
+      SET title = ?, description = ?, priority = ?
+      WHERE id = ?
+  `;
+  const info = db.prepare(sql).run(title, description,priority, id);
+  if (info.changes > 0) {
+      res.json({ message: 'todo updated successfully' });
+  } else {
+      res.status(404).json({ error: 'todo not found' });
+  }
 });
 
-app.listen(5000, () => {
-  console.log('Your server is running on http://localhost:5000');
+
+
+// Delete a user by id
+app.delete('/todo/:id', (req, res) => {
+  const { id } = req.params;
+  const sql = `
+      DELETE FROM todo
+      WHERE id = ?
+  `;
+  const info = db.prepare(sql).run(id);
+  if (info.changes > 0) {
+      res.json({ message: 'User deleted successfully' });
+  } else {
+      res.status(404).json({ error: 'User not found' });
+  }
+});
+
+
+app.listen(port, () => {
+  console.log(`Server running at http://localhost:${port}`);
 });

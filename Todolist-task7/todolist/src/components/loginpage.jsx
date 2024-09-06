@@ -78,7 +78,7 @@ function Loginpage() {
             marginBottom: "20px"}}>Hello, Friend!</h3>
                     <p style={{ margin: "0px",
             fontSize: "16px",}}>Enter your personal details and start journey with us</p>
-               <Link to='./register.jsx' > <button class="btn2" style={{
+               <Link to='/Registerpage' > <button class="btn2" style={{
             color: "#fff",
             padding: "10px 20px",
             border: "none",

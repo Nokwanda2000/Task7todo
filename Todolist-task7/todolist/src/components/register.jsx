@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
-import SQL from 'sql.js';
+import React, { useState, useEffect } from 'react';
+import initSqlJs from 'sql.js'; // Import the initSqlJs function
 import { Link } from 'react-router-dom';
 import Home from '../pages/Home';
 import axios from 'axios';
+
+let SQL;
 
 export default function Register() {
   const [formData, setFormData] = useState({
@@ -12,6 +14,8 @@ export default function Register() {
     password: '',
   });
 
+  const [successMessage, setSuccessMessage] = useState(''); // Add a state for success message
+
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -19,34 +23,42 @@ export default function Register() {
     });
   };
 
-  // const db = new SQL.Database();
-  // db.run(`
-  //   CREATE TABLE IF NOT EXISTS users (
-  //     id INTEGER PRIMARY KEY,
-  //     firstName TEXT,
-  //     lastName TEXT,
-  //     email TEXT,
-  //     password TEXT
-  //   );
-  // `);
+  useEffect(() => {
+    initSqlJs().then((SQLJs) => {
+      SQL = SQLJs;
+      const db = new SQL.Database(); // Create a new database instance
+      db.run(`
+        CREATE TABLE IF NOT EXISTS users (
+          id INTEGER PRIMARY KEY,
+          firstName TEXT,
+          lastName TEXT,
+          email TEXT,
+          password TEXT
+        );
+      `);
+    });
+  }, []);
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   try {
-  //     db.run(`
-  //       INSERT INTO users (firstName, lastName, email, password)
-  //       VALUES (?, ?, ?, ?)
-  //     `, [formData.firstName, formData.lastName, formData.email, formData.password]);
-  //     console.log('Form submitted:', formData);
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
-  
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const db = new SQL.Database(); // Create a new database instance
+      db.run(`
+        INSERT INTO users (firstName, lastName, email, password)
+        VALUES (?, ?, ?, ?)
+      `, [formData.firstName, formData.lastName, formData.email, formData.password]);
+      setSuccessMessage('User registered successfully!'); // Set success message
+      console.log('Form submitted:', formData);
+    } catch (error) {
+      console.error(error);
+      setSuccessMessage('Error registering user. Please try again.'); // Set error message
+    }
+  };
+
   return (
-    <div className="register-container">
-      <h3>Register using your details</h3>
-      <form  className="register-form">
+    <div className="register-container" style={{padding:"30px"}}>
+      <h3 style={{ marginLeft: "90px", color:"purple" }}>Register using your details</h3>
+      <form onSubmit={handleSubmit} className="register-form">
         <h2 className="register-title">Register</h2>
         <div className="form-group">
           <label htmlFor="firstName" className="form-label">First Name:</label>
@@ -59,7 +71,6 @@ export default function Register() {
             required
             className="form-input"
             style={{
-              padding: '10px',
               fontSize: '16px',
               border: '1px solid #ccc',
               borderRadius: '5px',
@@ -79,7 +90,6 @@ export default function Register() {
             required
             className="form-input"
             style={{
-              padding: '10px',
               fontSize: '16px',
               border: '1px solid #ccc',
               borderRadius: '5px',
@@ -99,7 +109,6 @@ export default function Register() {
             required
             className="form-input"
             style={{
-              padding: '10px',
               fontSize: '16px',
               border: '1px solid #ccc',
               borderRadius: '5px',
@@ -119,8 +128,6 @@ export default function Register() {
             required
             className="form-input"
             style={{
-              padding: '10px',
-              fontSize: '16px',
               border: '1px solid #ccc',
               borderRadius: '5px',
               width: '100%',
@@ -128,21 +135,25 @@ export default function Register() {
             }}
           />
         </div>
-        <Link to='/Home'> <button
-          type="submit"
-          className="register-button"
-          style={{
-            backgroundColor: '#4CAF50',
-            color: '#fff',
-            padding: '10px 20px',
-            border: 'none',
-            borderRadius: '5px',
-            cursor: 'pointer',
-          }}
-        >
-          Register
-        </button></Link>
-    
+        <p style={{ color: successMessage === 'User registered successfully!' ? 'green' : 'red' }}>
+          {successMessage}
+        </p>
+        <Link to='/Home'> 
+          <button
+            type="submit"
+            className="register-button"
+            style={{
+              backgroundColor: '#4CAF50',
+              color: '#fff',
+              padding: '10px 20px',
+              border: 'none',
+              borderRadius: '5px',
+              cursor: 'pointer',
+            }}
+          >
+            Register
+          </button>
+        </Link>
       </form>
     </div>
   );

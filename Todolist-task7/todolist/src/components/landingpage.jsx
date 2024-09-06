@@ -27,13 +27,13 @@ function Landingpage() {
           <h2>Simply manage your todos</h2>
           <div className="pricing-grid">
             <div className="price">
-              <h3>Free</h3>
+              
               <p style={{ fontSize: "16px", color: "#999" }}>Don't have an account ?, simple just sign up
               </p>
               <button type="button">Sign up</button>
             </div>
             <div className="price">
-              <h3>Pro</h3>
+        
               <p style={{ fontSize: "16px", color: "#999" }}>Already have an accout simple click the Sign In button to sign in?</p>
               <button onClick={handleSignInClick} type="button">Sign In</button>
             </div>
