@@ -39,8 +39,8 @@ export default function Register() {
   };
 
   return (
-    <div className="register-container" >
-      <h3 style={{ marginLeft: "90px", color:"purple" }}>Register using your details</h3>
+    <div className="register-container"  style={{width:"100vh", height:"100vh"}}>
+      <h3 style={{ marginLeft: "16%", color:"purple" }}>Register using your details</h3>
       <form onSubmit={handleSubmit} className="register-form">
         <h2 className="register-title">Register</h2>
         <div className="form-group">
@@ -57,8 +57,8 @@ export default function Register() {
               fontSize: '16px',
               border: '1px solid #ccc',
               borderRadius: '5px',
-              width: '100%',
-              marginBottom: '20px',
+              width: '90%',
+              // marginBottom: '20px',
             }}
           />
         </div>
@@ -76,8 +76,8 @@ export default function Register() {
               fontSize: '16px',
               border: '1px solid #ccc',
               borderRadius: '5px',
-              width: '100%',
-              marginBottom: '20px',
+              width: '90%',
+              // marginBottom: '20px',
             }}
           />
         </div>
@@ -95,8 +95,8 @@ export default function Register() {
               fontSize: '16px',
               border: '1px solid #ccc',
               borderRadius: '5px',
-              width: '100%',
-              marginBottom: '20px',
+              width: '90%',
+              // marginBottom: '20px',
             }}
           />
         </div>
@@ -113,8 +113,8 @@ export default function Register() {
             style={{
               border: '1px solid #ccc',
               borderRadius: '5px',
-              width: '100%',
-              marginBottom: '20px',
+              width: '90%',
+              // marginBottom: '20px',
             }}
           />
         </div>

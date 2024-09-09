@@ -59,17 +59,17 @@ function Todo() {
   };
 
   return (
-    <div className='todo' style={{fontFamily: "sans-serif",
-      // display: "flex",
+    <div className='todo' style={{ fontFamily: "Arial, sans-serif",
+      display: "flex",
       // flexDirection: "column",
-      // alignItems: "center",
+      alignItems: "center",
       // width: "500px",
       // margin: "0 auto",
       // border:"1px ipx solid",
       // backgroundColor: "white",
       // borderRadius: "10px",
       // boxShadow: "#333",
-      // justifyContent:"center",
+      justifyContent:"center",
       // padding:"20px"
 
       }}>
@@ -81,12 +81,13 @@ function Todo() {
   display: 'flex',
   flexDirection: 'column',
   width: '100%',
-  maxWidth: '600px',
+  maxWidth: '300px',
   margin: '0 auto', // Center the form horizontally
   padding: '20px',
   borderRadius: '8px',
   boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-  backgroundColor: '#f9f9f9'
+  backgroundColor: '#f9f9f9',
+  justifyContent:"center"
 }}>
   <h2 style={{ marginBottom: '20px', textAlign: 'center', color: '#333' }}>Add New Task</h2>
 
@@ -95,14 +96,12 @@ function Todo() {
     fontSize: '16px',
     color: '#555'
   }}>
-    Title:
+    {/* Title: */}
     <input
       style={{
-        width: '100%',
-        padding: '12px',
-        border: '1px solid #ddd',
-        borderRadius: '6px',
-        marginTop: '5px',
+        padding: '10px',
+        border: '1px solid #ccc',
+        borderRadius: '4px',
         fontSize: '16px'
       }}
       type="text"
@@ -117,10 +116,10 @@ function Todo() {
     fontSize: '16px',
     color: '#555'
   }}>
-    Description:
+    {/* Description: */}
     <input
       style={{
-        width: '100%',
+        // width: '100%',
         padding: '12px',
         border: '1px solid #ddd',
         borderRadius: '6px',
@@ -142,7 +141,7 @@ function Todo() {
     Priority:
     <select
       style={{
-        width: '100%',
+        // width: '100%',
         padding: '12px',
         border: '1px solid #ddd',
         borderRadius: '6px',
@@ -168,7 +167,8 @@ function Todo() {
       cursor: 'pointer',
       fontSize: '16px',
       fontWeight: 'bold',
-      transition: 'background-color 0.3s ease'
+      transition: 'background-color 0.3s ease',
+      width:"200px"
     }}
     type="submit"
     onClick={handleAddTask}

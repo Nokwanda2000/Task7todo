@@ -36,7 +36,8 @@ li:hover{
   color: #4CAF50;
 }
 body{
-  background-color: grey;
+  /* background-color: grey; */
+  background-color: rgb(180, 150, 174);
 margin: 0;
 padding: 0;
   width: 100%;
