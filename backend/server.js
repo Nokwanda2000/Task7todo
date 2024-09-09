@@ -41,16 +41,7 @@ app.post('/todo', (req, res) => {
   insertStatement.run(title, description, priority); 
 
  
-  // Run the SQL statement with the provided values
-  // db.run(sql, [title, description, priority], (err) => {
-  //   if (err) {
-  //     console.error(err);
-  //     res.status(500).json({ error: 'Failed to add todo' }); 
-  //   } else {
-  //     res.status(201).json({ message: 'Todo added successfully' });
-  //     db.run('COMMIT'); // Commit the transaction 
-  //   }
-  // });
+  
 });
 
 // Get all users

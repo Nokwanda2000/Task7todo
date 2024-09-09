@@ -6,6 +6,7 @@ import axios from 'axios';
 
 let SQL;
 
+
 export default function Register() {
   const [formData, setFormData] = useState({
     firstName: '',
@@ -13,6 +14,9 @@ export default function Register() {
     email: '',
     password: '',
   });
+
+  const USER_REGEX =/^[a-zA-Z0-9]+@[a-zA-Z]+\.[a-z]+/;
+
 
   const [successMessage, setSuccessMessage] = useState(''); // Add a state for success message
 
