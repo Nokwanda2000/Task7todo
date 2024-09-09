@@ -1,11 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import initSqlJs from 'sql.js'; // Import the initSqlJs function
-import { Link } from 'react-router-dom';
-import Home from '../pages/Home';
-import axios from 'axios';
-
-let SQL;
-
+import React, { useState } from 'react';
+import axios from 'axios'; // Import axios for HTTP requests
+import { useNavigate } from 'react-router-dom'; // Import useNavigate for programmatic navigation
 
 export default function Register() {
   const [formData, setFormData] = useState({
@@ -15,10 +10,9 @@ export default function Register() {
     password: '',
   });
 
-  const USER_REGEX =/^[a-zA-Z0-9]+@[a-zA-Z]+\.[a-z]+/;
-
-
-  const [successMessage, setSuccessMessage] = useState(''); // Add a state for success message
+  const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const navigate = useNavigate(); // For navigation
 
   const handleChange = (e) => {
     setFormData({
@@ -27,40 +21,25 @@ export default function Register() {
     });
   };
 
-  useEffect(() => {
-    initSqlJs().then((SQLJs) => {
-      SQL = SQLJs;
-      const db = new SQL.Database(); // Create a new database instance
-      db.run(`
-        CREATE TABLE IF NOT EXISTS users (
-          id INTEGER PRIMARY KEY,
-          firstName TEXT,
-          lastName TEXT,
-          email TEXT,
-          password TEXT
-        );
-      `);
-    });
-  }, []);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
+  
+
     try {
-      const db = new SQL.Database(); // Create a new database instance
-      db.run(`
-        INSERT INTO users (firstName, lastName, email, password)
-        VALUES (?, ?, ?, ?)
-      `, [formData.firstName, formData.lastName, formData.email, formData.password]);
-      setSuccessMessage('User registered successfully!'); // Set success message
-      console.log('Form submitted:', formData);
+      const response = await axios.post('http://localhost:3001/register', formData);
+      setSuccessMessage(response.data.message);
+      setErrorMessage('');
+      alert('successsfully registered')
+      navigate('/home'); // Navigate to home after successful registration
     } catch (error) {
-      console.error(error);
-      setSuccessMessage('Error registering user. Please try again.'); // Set error message
+      console.error("Registration error", error);
+      setErrorMessage(error.response ? error.response.data.error : 'Registration failed. Please try again.');
+      setSuccessMessage('');
     }
   };
 
   return (
-    <div className="register-container" style={{padding:"30px"}}>
+    <div className="register-container" >
       <h3 style={{ marginLeft: "90px", color:"purple" }}>Register using your details</h3>
       <form onSubmit={handleSubmit} className="register-form">
         <h2 className="register-title">Register</h2>
@@ -139,25 +118,23 @@ export default function Register() {
             }}
           />
         </div>
-        <p style={{ color: successMessage === 'User registered successfully!' ? 'green' : 'red' }}>
-          {successMessage}
+        <p style={{ color: successMessage ? 'green' : 'red' }}>
+          {successMessage || errorMessage}
         </p>
-        <Link to='/Home'> 
-          <button
-            type="submit"
-            className="register-button"
-            style={{
-              backgroundColor: '#4CAF50',
-              color: '#fff',
-              padding: '10px 20px',
-              border: 'none',
-              borderRadius: '5px',
-              cursor: 'pointer',
-            }}
-          >
-            Register
-          </button>
-        </Link>
+        <button
+          type="submit"
+          className="register-button"
+          style={{
+            backgroundColor: '#4CAF50',
+            color: '#fff',
+            padding: '10px 20px',
+            border: 'none',
+            borderRadius: '5px',
+            cursor: 'pointer',
+          }}
+        >
+          Register
+        </button>
       </form>
     </div>
   );

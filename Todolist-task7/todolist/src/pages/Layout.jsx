@@ -11,9 +11,7 @@ export default function Layout() {
         <ul>
         <img src={Logo} style={{width:"70px", height:"60px"}} alt="Logo" />
   
-          <li>
-            <Link to="/"></Link>
-          </li>
+        
           <li>
             <Link to="/Landing">Home</Link>
           </li>
