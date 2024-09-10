@@ -19,7 +19,6 @@ bash
 cd backend
 node server.js
 
-
 Install backend server dependencies
 bash
 npm i express
