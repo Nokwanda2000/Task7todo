@@ -1,6 +1,7 @@
 <img src="https://socialify.git.ci/Nokwanda2000/Task7todo/image?language=1&owner=1&name=1&stargazers=1&theme=Light" alt="Task7todo" width="640" height="320" />
 
 <h1>Todolist Task7</h1>
+<p>This is a todolist app, allows you to add your todolist</p>
 ## Run Locally
 
 Clone the project
