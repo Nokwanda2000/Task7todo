@@ -16,7 +16,7 @@ function Landingpage() {
         <section className="hero">
           <div className="hero-text">
             <h1 style={{color:"purple"}}>Easily Manage Your Daily Tasks</h1>
-            <p style={{font:"bold"}}>Overwhelmed by your daily tasks? Get them under control with todolist! Get notified when the is available.</p>
+            <p style={{fontColor:"black"}}>Overwhelmed by your daily tasks? Get them under control with a todolist</p>
           </div>
           <div className="hero-image" style={{width:"300px", height:"400px", boxShadow:"1px 1px 1px blue"}}>
             <img src={Image} style={{width:"320px", height:"300px", borderRadius:"20px"}} alt="Hero image" />
