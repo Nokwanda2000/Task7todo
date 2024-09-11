@@ -13,12 +13,6 @@ Go to the project directory
  cd Todolist-Task7
   cd todolist
 ```
-
-Start backend sever
-```bash
-cd backend
-node server.js
-```
 Install backend server dependencies
 ```bash
 npm i express
@@ -29,7 +23,11 @@ npm i morgan
 npm i bcrypt
 npm i nodemon
 ```
-
+Start backend sever
+```bash
+cd backend
+node server.js
+```
 
 Install dependencies
 ```bash
