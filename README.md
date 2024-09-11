@@ -26,12 +26,13 @@ npm i nodemon
 Start backend sever
 ```bash
 cd backend
-node server.js
+nodemon server.js
 ```
 
-Install dependencies
+Install frontend dependencies
 ```bash
   npm install
+  npm i axios
 ```
 
 Start the react server
