@@ -16,12 +16,12 @@ git clone https://github.com/Nokwanda2000/Task7todo.git
 ```
 
 Start backend sever
-bash
+```bash
 cd backend
 node server.js
-
+```
 Install backend server dependencies
-bash
+```bash
 npm i express
 npm i better-sqlite3
 npm i cors
@@ -29,6 +29,7 @@ npm i sonwebtoken
 npm i morgan
 npm i bcrypt
 npm i nodemon
+```
 
 
 Install dependencies
