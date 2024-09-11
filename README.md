@@ -13,6 +13,16 @@ Go to the project directory
  cd Todolist-Task7
   cd todolist
 ```
+Install frontend dependencies
+```bash
+  npm install
+  npm i axios
+```
+
+Start the react server
+```bash
+  npm run dev
+```
 Install backend server dependencies
 ```bash
 npm i express
@@ -28,18 +38,6 @@ Start backend sever
 cd backend
 nodemon server.js
 ```
-
-Install frontend dependencies
-```bash
-  npm install
-  npm i axios
-```
-
-Start the react server
-```bash
-  npm run dev
-```
-
 ## Tech Stack
 
 **Client:** React JS, HTML5, JavaScript, CSS3
