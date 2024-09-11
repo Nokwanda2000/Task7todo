@@ -40,4 +40,4 @@ nodemon server.js
 ```
 ## Tech Stack
 
-**Client:** React JS, HTML5, JavaScript, CSS3
+**Client:** React JS, HTML5, JavaScript, CSS3, Express.js
