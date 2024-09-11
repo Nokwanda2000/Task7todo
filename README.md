@@ -6,10 +6,9 @@
 
 Clone the project
 ```bash
-
-
 git clone https://github.com/Nokwanda2000/Task7todo.git
-```Go to the project directory
+```
+Go to the project directory
 ```bash
  cd Todolist-Task7
   cd todolist
